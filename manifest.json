@@ -1,0 +1,50 @@
+{
+	"BundleType": "Application",
+	"BundleIdentifier": "musju",
+	"BundleVersion": "0.1b",
+	"AcceptedLinkTypes":[
+		"album",
+		"artist",
+		"track",
+		"playlist",
+		"user"
+	],
+	"AppIcon": {
+		"18x18": "icon.png"
+	},
+	"AppName": {
+		"en": "Musju"
+	},
+	"AppDescription": {
+		"en": "Musju: Collaborative Playlists."
+	},
+	"SupportedLanguages": [
+		"en"
+	],
+	"DefaultTabs": [
+		{
+			"arguments": "home",
+			"title": {
+				"en": "Home"
+			}
+		}, 
+		{
+			"arguments": "playlist",
+			"title": {
+				"en": "Playlist"
+			}
+		},
+		{
+			"arguments": "search",
+			"title": {
+				"en": "Search/Pubs"
+			}
+        }
+	],
+	"RequiredPermissions": [
+		"https://*",
+		"http://*"
+	],
+	"RequiredInterface": "1",
+	"VendorIdentifier": "com.kitchensink"
+}
