@@ -87,7 +87,7 @@ function createNewPlaylist() {
 						success : function(newplaylist) {
 							alert("You have created a new Musju Playlist...start sharing it!!");
 
-							showPlaylistNoImages(newPlaylistURI);
+							showPlaylistImages(newPlaylistURI);
 							
 
 						},
@@ -146,8 +146,10 @@ function showPlaylistNoImages(uriPl){
 function showPlaylistImages(uriPlaylist) {
 	var tempPlaylist = new models.Playlist.fromURI(uriPlaylist);
 	
-	alert("hello");
-	$("#showActualPlaylist2").empty();
+	
+	$("#actualSong").empty();
+	$("#nextSongSearch").empty();
+	$("#possibleSongs").empty();
 	tempPlaylist2 = new models.Playlist();
 	$.each(tempPlaylist.tracks, function(num, track) {
 
@@ -157,17 +159,45 @@ function showPlaylistImages(uriPlaylist) {
 	//console.log(uriPlaylist.length);
 	var i = 0;
 	$.each(tempPlaylist2.tracks, function(num, track2) {
-		$("#showActualPlaylist2").append(
-				'<li class="item" data-id="id-' + i
-						+ '" data-type="track"><img height="100" src="'
-						+ track2.image + '" /><h3>' + (i + 1) + '.'
-						+ track2.name + '(' + track2.artists[0].name
-						+ ')</h3></li>');
+		switch(i)
+		{
+		case 0:
+			$("#actualSong").append(
+					'<a class="item" data-id="id-' + i
+							+ '" data-type="track"><img height="100" src="'
+							+ track2.image + '" /><h3>' + (i + 1) + '.'
+							+ track2.name + '(' + track2.artists[0].name
+							+ ')</h3></a>');
+		  break;
+		case 1:
+			$("#nextsong").append(
+					'<a class="item" data-id="id-' + i
+							+ '" data-type="track"><img height="100" src="'
+							+ track2.image + '" /><h3>' + (i + 1) + '.'
+							+ track2.name + '(' + track2.artists[0].name
+							+ ')</h3></a>');
+			
+		  break;
+		default:
+			$("#possibleSongs").append(
+					'<li class="item" data-id="id-' + i
+							+ '" data-type="track"><img height="100" src="'
+							+ track2.image + '" /><h3>' + (i + 1) + '.'
+							+ track2.name + '(' + track2.artists[0].name
+							+ ')</h3></li>');
+		}
+		
 		// $("#showActualPlaylist2").append("trackuri:"+track2.uri+"cover"+track2.image+"artist"+track2.artists[0].name);
 		i++;
+		
 
 	});
 
+	
+	window.location.href = 'spotify:app:musju:playlist';
+	$("#friend-tracks").empty();
+	
+	$("#friend-drop").empty();
 	
 	//setInterval(function() {
 		//updatePl()
@@ -188,17 +218,17 @@ function getPlaylistUser() {
 	
 	var PlaylistMusju = Parse.Object.extend("PlaylistMusju");
 	var query = new Parse.Query(PlaylistMusju);
-	alert("idUser"+sessionStorage.idUser);
+	
 	query.equalTo("idUser", sessionStorage.idUser);
 	query.find({
 		success : function(results) {
 			var i=0;
-			alert("playlist ready"+results.length);
+			
 		while(i<results.length){
-				alert("results:"+results[i]);
+			
 				url="'"+results[i].get("url")+"'";
 				
-				$("#playlistsUser").append('<a onclick="showPlaylistNoImages('+url+')" class="large orange awesome">'+results[i].get("name")+' &raquo;</a> <br /><br />');
+				$("#playlistsUser").append('<a href="spotify:app:musju:playlist" onclick="showPlaylistImages('+url+')" class="large orange awesome">'+results[i].get("name")+' &raquo;</a> <br /><br />');
 			i++;
 				}
 		

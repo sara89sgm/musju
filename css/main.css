@@ -92,7 +92,7 @@ ul#filterOptions li.active a {
 /*- OUR DATA HOLDER -*/
 ul.ourHolder {
 	width: 800px;
-	height: 1000px;
+	height: 100%;
 	overflow: hidden;
 }
 
@@ -209,4 +209,11 @@ ul.ourHolder li.item h3 {
 img.floatLeft { 
     float: left; 
     margin: 4px; 
+}
+
+.borderbottom{
+	border-bottom-style: 5px solid black;
+	width:100%;
+	margin-top:15px;
+	margin-bottom:15px;
 }

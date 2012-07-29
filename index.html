@@ -12,7 +12,8 @@
 <script src="http://connect.facebook.net/en_US/all.js"></script>
 <script src="http://www.parsecdn.com/js/parse-1.0.6.min.js"></script>
 <script type="text/javascript" src="js/easeinoutquad1.3.js"></script>
-<script type="text/javascript" src="js/jquery-animate-css-rotate-scale.js"></script>
+<script type="text/javascript"
+	src="js/jquery-animate-css-rotate-scale.js"></script>
 <script type="text/javascript" src="js/jquery.quicksand.js"></script>
 
 <script type="text/javascript" src="js/init.js"></script>
@@ -26,33 +27,34 @@
 </head>
 <body>
 	<div id="login" class="loginPage">
-		<div data-role="content" style="padding:40px;">
-		<div class="loginDiv">
-			<div style="margin-top:10px;">
-				<img src="img/musju25.png" alt="image"
-					style="display: block; margin-left: auto; margin-right: auto; margin-top: auto;"
-					height="150px" />
-			</div>
-			<br/>
-			<br/>
-			<div style="display: block; margin-left: auto; margin-right: auto; text-align: center;">
-				<div>
-					<fieldset>
-						<label for="textinput1"> </label> <input id="loginUserName"
-							placeholder="" value="user" type="tel" />
-					</fieldset>
+		<div data-role="content" style="padding: 40px;">
+			<div class="loginDiv">
+				<div style="margin-top: 10px;">
+					<img src="img/musju25.png" alt="image"
+						style="display: block; margin-left: auto; margin-right: auto; margin-top: auto;"
+						height="150px" />
 				</div>
-				<div>
-					<fieldset>
-						<label for="textinput2"> </label> <input id="loginPass"
-							placeholder="" value="password" type="password" />
-					</fieldset>
+				<br /> <br />
+				<div
+					style="display: block; margin-left: auto; margin-right: auto; text-align: center;">
+					<div>
+						<fieldset>
+							<label for="textinput1"> </label> <input id="loginUserName"
+								placeholder="" value="user" type="tel" />
+						</fieldset>
+					</div>
+					<div>
+						<fieldset>
+							<label for="textinput2"> </label> <input id="loginPass"
+								placeholder="" value="password" type="password" />
+						</fieldset>
+					</div>
+					<a class="medium orange awesome" onclick="login()">Login</a> <a
+						class="medium orange awesome" href="sp://musju/pages/singup.html">Sing
+						In</a> </br> <a href="#" id="fb-login"> <img src="img/fb-login.png" />
+
+					</a>
 				</div>
-				<a class="medium orange awesome" onclick="login()">Login</a> <a class="medium orange awesome" href="sp://musju/pages/singup.html">Sing In</a>
-				</br> <a href="#" id="fb-login"> <img src="img/fb-login.png" />
-				
-				</a>
-			</div>
 			</div>
 		</div>
 	</div>
@@ -60,56 +62,57 @@
 		<div id="home" class="section">
 			<div id="first">
 				<div>
-				
-					<div style="float:right;" >
-					<h1 class="blackText">Musju</h1>
-					<h3 class="blackText">Create collaborative playlist & listen to what happens near
-						you!</h3>
-						
-				<div  id="friend-drop" >Drag and drop a playlist here!</div>
-				<a style="float:right;"class="medium orange awesome" name="submit" onclick="submitPlaylist()">Create Musju Playlist</a>
-				</br>
-				<div class="friend-title" id="friend-title"></div>
-				<div id="friend-tracks"></div>
-					
+
+					<div style="float: right;">
+						<h1 class="blackText">Musju</h1>
+						<h3 class="blackText">Create collaborative playlist & listen
+							to what happens near you!</h3>
+
+						<div id="friend-drop">Drag and drop a playlist here!</div>
+						<a style="float: right;" class="medium orange awesome"
+							name="submit" onclick="submitPlaylist()">Create Musju
+							Playlist</a> </br>
+						<div class="friend-title" id="friend-title"></div>
+						<div id="friend-tracks"></div>
+
+					</div>
+					<div class="floatleft">
+						<div>
+							<img align="center" src="img/musju25.png" width="250px"
+								height="250px" />
+						</div>
+						<div>
+							<h2 style="color: #000000;">Your playlists</h2>
+							<div id="playlistsUser"></div>
+							<div id="play-history"></div>
+						</div>
+					</div>
 				</div>
-				<div class="floatleft">
-				<div>
-					<img align="center" src="img/musju25.png" width="250px" height="250px" />
-					</div>
-					<div >
-					<h2 style="color:#000000;">Your playlists</h2>
-					<div id="playlistsUser">
-					</div>
-					<div id="play-history"></div></div>
-					</div>
-</div>
 				<div style="clear: both"></div>
-				
-				
+
+
 			</div>
-			
+
 		</div>
 		<div id="playlist" class="section">
-	
-<div class="friend-title" style="color:#000000;" id="title-actualPl"></div>
-  
-  <div class="ourHolder" id="showActualPlaylist2">
-    
-  </div>
+		<div class="friend-title" style="color: #000000;" id="title-actualPl"></div>
+		<div id="actualSong" class="borderbottom blackText"></div>
+		<div id="nextSongSearch" class="borderbottom blackText "><div style="float:left" id="nextsong"></div><div style="float:right" id="searc"></div></div>
+<div  ><ul id="possibleSongs" class="ourHolder"></ul></div>
+			
 
+			
 
 		</div>
 		<div id="search" class="section">
-			Enter a search term: <input type="text" id="search-term"
-				value="song">
+			Enter a search term: <input type="text" id="search-term" value="song">
 			<button id="search-basic">Search</button>
 			|
 			<button id="search-play">Play</button>
 			|
 			<button id="search-explore">Explore</button>
-			
-			
+
+
 			<div id="search-results"></div>
 		</div>
 	</div>
