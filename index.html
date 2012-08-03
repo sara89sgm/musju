@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="sp://import/css/api.css">
 <link rel="stylesheet" href="css/kitchensink.css">
 <link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/jqueryui/jquery-ui-1.8.22.custom">
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <div id="fb-root"></div>
 <script src="http://connect.facebook.net/en_US/all.js"></script>
@@ -14,8 +15,14 @@
 <script type="text/javascript" src="js/easeinoutquad1.3.js"></script>
 <script type="text/javascript"
 	src="js/jquery-animate-css-rotate-scale.js"></script>
-<script type="text/javascript" src="js/jquery.quicksand.js"></script>
+	
+	
+	<link type="text/css" href="css/jqueryui/jquery-ui-1.8.22.custom.css" rel="Stylesheet" />	
 
+<script type="text/javascript" src="js/jquery-ui-1.8.22.custom.min.js"></script>
+	
+<script type="text/javascript" src="js/jquery.quicksand.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.8.22.custom.min"></script>
 <script type="text/javascript" src="js/init.js"></script>
 <script type="text/javascript" src="js/player.js"></script>
 <script type="text/javascript" src="js/social.js"></script>
@@ -39,13 +46,13 @@
 					style="display: block; margin-left: auto; margin-right: auto; text-align: center;">
 					<div>
 						<fieldset>
-							<label for="textinput1"> </label> <input id="loginUserName"
-								placeholder="" value="user" type="tel" />
+							<label for="loginUserName"> </label> <input id="loginUserName"
+								placeholder="" value="user" type="text" />
 						</fieldset>
 					</div>
 					<div>
 						<fieldset>
-							<label for="textinput2"> </label> <input id="loginPass"
+							<label for="loginPass"> </label> <input id="loginPass"
 								placeholder="" value="password" type="password" />
 						</fieldset>
 					</div>
@@ -58,7 +65,7 @@
 			</div>
 		</div>
 	</div>
-	<div id="restApp">
+	<div id="restApp" class="whiteback">
 		<div id="home" class="section">
 			<div id="first">
 				<div>
@@ -96,24 +103,34 @@
 		</div>
 		<div id="playlist" class="section">
 		<div class="friend-title" style="color: #000000;" id="title-actualPl"></div>
-		<div id="actualSong" class="borderbottom blackText"></div>
-		<div id="nextSongSearch" class="borderbottom blackText "><div style="float:left" id="nextsong"></div><div style="float:right" id="searc"></div></div>
-<div  ><ul id="possibleSongs" class="ourHolder"></ul></div>
+		<hr class="hrsep"/>
+		Now playing: 
+		<div id="actualSong" style="height:125px" >
+		
+		</div>
+		<hr class="hrsep"/>
+		Next song:
+		<div id="nextSongSearch" class=" blackText "><div style="float:left" id="nextsong"></div>
+		
+		<div style="float:right" id="searchSong" class="ui-widget jqueryui">
+		<p> SEARCH <input  type="text" id="spotify_song_search" class="jqueryUI"/> <a onclick="requestSong()" class="large orange awesome">Request!</a>
+		</p>
+		<a id='track'></a>​</div></div>
+		<hr class="hrsep"/>
+<div><ul id="possibleSongs" class="ourHolder"></ul></div>
 			
 
 			
 
 		</div>
 		<div id="search" class="section">
+		
 			Enter a search term: <input type="text" id="search-term" value="song">
-			<button id="search-basic">Search</button>
-			|
-			<button id="search-play">Play</button>
-			|
-			<button id="search-explore">Explore</button>
+			<button onclick="searchPage()" class="large orange awesome">Search</button>
+			
 
 
-			<div id="search-results"></div>
+			<div id="search-results2"></div>
 		</div>
 	</div>
 </body>

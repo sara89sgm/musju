@@ -43,13 +43,8 @@ display: block; margin-left: auto; margin-right: auto; margin-top: auto;
 #commands {
 	margin-bottom:30px;
 }
-ul {
-	list-style: disc;
-	margin-left: 20px; 
-}
-a {
-	color:#eeeeee;
-}
+
+
 #search-term {
 	width:200px;
 }

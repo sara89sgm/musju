@@ -39,8 +39,29 @@ $(function() {
 			showTracks(uri);
 		}
 	}
+	
+
+	
+	if (navigator.geolocation) {
+		  navigator.geolocation.getCurrentPosition(successGeo, errorGeo);
+		} else {
+		  error('not supported');
+		}
+	
 
 });
+
+function successGeo(position) {
+	  lng=position.coords.longitude;
+	  lat=position.coords.latitude;
+	  console.log("fine geolocation");
+	}
+
+	function errorGeo(msg) {
+	
+	  
+	  console.log("error geolocation"+msg.code);
+	}
 
 function showTracks(uriPl) {
 
@@ -145,10 +166,10 @@ function showPlaylistNoImages(uriPl){
 
 function showPlaylistImages(uriPlaylist) {
 	var tempPlaylist = new models.Playlist.fromURI(uriPlaylist);
-	
+sessionStorage.actualPlaylist=uriPlaylist;
 	
 	$("#actualSong").empty();
-	$("#nextSongSearch").empty();
+	$("#nextsong").empty();
 	$("#possibleSongs").empty();
 	tempPlaylist2 = new models.Playlist();
 	$.each(tempPlaylist.tracks, function(num, track) {
@@ -156,24 +177,52 @@ function showPlaylistImages(uriPlaylist) {
 		tempPlaylist2.add(models.Track.fromURI(track.uri));
 	});
 	
+	$("#title-actualPl").append(tempPlaylist.name);
 	//console.log(uriPlaylist.length);
 	var i = 0;
 	$.each(tempPlaylist2.tracks, function(num, track2) {
 		switch(i)
 		{
 		case 0:
-			$("#actualSong").append(
-					'<a class="item" data-id="id-' + i
-							+ '" data-type="track"><img height="100" src="'
-							+ track2.image + '" /><h3>' + (i + 1) + '.'
-							+ track2.name + '(' + track2.artists[0].name
-							+ ')</h3></a>');
+			
+			  var trackAux = models.Track.fromURI(track2.uri);
+			var playlistt = new models.Playlist();
+            playlistt.add(trackAux);
+			var playerView2 = new views.Player();
+           // playerView2.track = null; // Don't play the track right away
+            playerView2.context = playlistt;
+            $('#actualSong').append(playerView2.node);
+            $('#actualSong').append( '<a class="more medium orange awesome""  style="float:right">More</a>');
+            $('#actualSong').append( '<div id="moreInfoResults"></div>');
+            var nameS=trackAux.name;
+            var artist="";
+          
+            
+            
+        	$('a.more').click(function(e){
+        		
+        	    if($(this).parent().hasClass("open")){
+        	        $(this).parent().animate({"height":125}).removeClass("open");
+        	        $(this).html("More...");
+        	        $("#moreInfoResults").empty();
+        	        
+        	    }else{
+        	    	
+        	        $(this).parent().animate({"height":300}).addClass("open");
+        	        $(this).html("Less...");
+        	        alert(track2.album.name);
+        	        moreInfo(track2.name, track2.artists[0].name, track2.album.name);
+        	        
+        	    }
+        	    e.preventDefault();
+        	});
+  
 		  break;
 		case 1:
 			$("#nextsong").append(
 					'<a class="item" data-id="id-' + i
 							+ '" data-type="track"><img height="100" src="'
-							+ track2.image + '" /><h3>' + (i + 1) + '.'
+							+ track2.image + '" /><h3 class="blackText">'
 							+ track2.name + '(' + track2.artists[0].name
 							+ ')</h3></a>');
 			
@@ -182,9 +231,9 @@ function showPlaylistImages(uriPlaylist) {
 			$("#possibleSongs").append(
 					'<li class="item" data-id="id-' + i
 							+ '" data-type="track"><img height="100" src="'
-							+ track2.image + '" /><h3>' + (i + 1) + '.'
+							+ track2.image + '" /><h4 class="blackText">' 
 							+ track2.name + '(' + track2.artists[0].name
-							+ ')</h3></li>');
+							+ ')</h4></li>');
 		}
 		
 		// $("#showActualPlaylist2").append("trackuri:"+track2.uri+"cover"+track2.image+"artist"+track2.artists[0].name);
@@ -198,6 +247,7 @@ function showPlaylistImages(uriPlaylist) {
 	$("#friend-tracks").empty();
 	
 	$("#friend-drop").empty();
+	$("#friend-drop").append("Drag and drop your playlist!");
 	
 	//setInterval(function() {
 		//updatePl()
@@ -239,4 +289,32 @@ function getPlaylistUser() {
 			alert("Error: " + error.code + " " + error.message);
 		}
 	});
+}
+
+function requestSong(){
+	  var track = models.Track.fromURI(sessionStorage.requestSongUri);
+      // Create a playlist object from a URI
+     
+      var tempPlaylist = new models.Playlist.fromURI(sessionStorage.actualPlaylist);
+      // Add the track
+      tempPlaylist.add(track);
+      var last=tempPlaylist.length;
+      last--;
+      $("#possibleSongs").append(
+				'<li class="item" ><img height="100" src="'
+						+ tempPlaylist.tracks[last].image + '" /><h4 class="blackText">' 
+						+ tempPlaylist.tracks[last].name + '(' + tempPlaylist.tracks[last].artists[0].name
+						+ ')</h4></li>');
+
+	
+}
+
+function moreInfo(name, artist,album){
+	
+	 /* $.get("http://ws.spotify.com/search/1/track.json", {
+          q: ""+name+" "+artist
+      }, function(data) {
+      	alert("data"+data);
+      });*/
+	searchMoreInfo(name,artist,album);
 }

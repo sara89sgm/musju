@@ -35,6 +35,10 @@ body {
 	font: 12px/18px Arial, Helvetica, sans-serif;
 	color: #333;
 	background: #fff;
+	
+}
+.whiteback{
+	background:#ffffff;
 }
 
 p {
@@ -211,9 +215,19 @@ img.floatLeft {
     margin: 4px; 
 }
 
+.hrsep {
+  border: 0;
+  width: 100%;
+  color: #000;
+background-color: #000;
+height: 5px;
+margin-top:10px;
+margin-bottom:10px;
+}
+
 .borderbottom{
-	border-bottom-style: 5px solid black;
-	width:100%;
+	border-bottom-style: 10px solid black;
+	width:850px;
 	margin-top:15px;
 	margin-bottom:15px;
 }

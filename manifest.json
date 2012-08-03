@@ -10,7 +10,7 @@
 		"user"
 	],
 	"AppIcon": {
-		"18x18": "icon.png"
+		"18x18": "musju25.png"
 	},
 	"AppName": {
 		"en": "Musju"
@@ -37,7 +37,13 @@
 		{
 			"arguments": "search",
 			"title": {
-				"en": "Search/Pubs"
+				"en": "Search"
+			}
+		},
+		{
+			"arguments": "pubs",
+			"title": {
+				"en": "Pubs"
 			}
         }
 	],
