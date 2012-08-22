@@ -31,7 +31,7 @@ $(function() {
 	function handleDrop(e) {
 		this.style.background = '#333333';
 		var uri = e.dataTransfer.getData('Text');
-		//alert("uri:  " + uri);
+		// alert("uri: " + uri);
 		if (uri.split("/")[5] == "playlist") {
 
 			newPlaylistURI = uri;
@@ -107,7 +107,7 @@ function createNewPlaylist() {
 					{
 						success : function(newplaylist) {
 							alert("You have created a new Musju Playlist...start sharing it!!");
-
+							saveTracksPlaylist(newPlaylistURI);
 							showPlaylistImages(newPlaylistURI);
 							
 
@@ -144,6 +144,50 @@ function checkPlaylistNoExists(url){
 	});
 	
 }
+function saveTracksPlaylist(url){
+
+
+var tempPlaylist = new models.Playlist.fromURI(url);
+
+	
+	
+	tempPlaylist2 = new models.Playlist();
+	$.each(tempPlaylist.tracks, function(num, track) {
+
+		tempPlaylist2.add(models.Track.fromURI(track.uri));
+	});
+	
+	
+	// console.log(uriPlaylist.length);
+	var i = 0;
+	$.each(tempPlaylist2.tracks, function(num, track2) {
+           var TrackPlaylistMusju = Parse.Object.extend("TrackPlaylistMusju");
+	var newtrack = new TrackPlaylistMusju();
+	
+	
+	newtrack.set("urlTrack", track2.uri);
+	newtrack.set("nameTrack", track2.name);
+        newtrack.set("nameArtist", track2.artists[0].name);
+	newtrack.set("urlPlaylist", url);
+	newtrack.set("idUser", sessionStorage.idUser);
+        newtrack.set("votes", 0);
+        
+	
+	
+
+	newtrack.save(null,{
+						success : function(newplaylist) {
+						
+						},
+						error : function(newplaylist, error) {
+							// The save failed.
+							// error is a Parse.Error with an error code and
+							// description.
+						}
+					});
+            
+            });
+ }
 
 function showPlaylistNoImages(uriPl){
 	var uriPlaylist = new models.Playlist.fromURI(uriPl);
@@ -178,7 +222,7 @@ sessionStorage.actualPlaylist=uriPlaylist;
 	});
 	
 	$("#title-actualPl").append(tempPlaylist.name);
-	//console.log(uriPlaylist.length);
+	// console.log(uriPlaylist.length);
 	var i = 0;
 	$.each(tempPlaylist2.tracks, function(num, track2) {
 		switch(i)
@@ -249,9 +293,9 @@ sessionStorage.actualPlaylist=uriPlaylist;
 	$("#friend-drop").empty();
 	$("#friend-drop").append("Drag and drop your playlist!");
 	
-	//setInterval(function() {
-		//updatePl()
-	//}, 5000);
+	// setInterval(function() {
+		// updatePl()
+	// }, 5000);
 
 }
 
@@ -311,10 +355,9 @@ function requestSong(){
 
 function moreInfo(name, artist,album){
 	
-	 /* $.get("http://ws.spotify.com/search/1/track.json", {
-          q: ""+name+" "+artist
-      }, function(data) {
-      	alert("data"+data);
-      });*/
+	 /*
+		 * $.get("http://ws.spotify.com/search/1/track.json", { q: ""+name+"
+		 * "+artist }, function(data) { alert("data"+data); });
+		 */
 	searchMoreInfo(name,artist,album);
 }
