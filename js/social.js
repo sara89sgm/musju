@@ -349,9 +349,37 @@ function requestSong(){
 						+ tempPlaylist.tracks[last].image + '" /><h4 class="blackText">' 
 						+ tempPlaylist.tracks[last].name + '(' + tempPlaylist.tracks[last].artists[0].name
 						+ ')</h4></li>');
+      
+      
+      var TrackPlaylistMusju = Parse.Object.extend("TrackPlaylistMusju");
+  	var newtrack = new TrackPlaylistMusju();
+  	
+  	
+  	newtrack.set("urlTrack", track.uri);
+  	newtrack.set("nameTrack", track.name);
+          newtrack.set("nameArtist", track.artists[0].name);
+  	newtrack.set("urlPlaylist", sessionStorage.actualPlaylist);
+  	newtrack.set("idUser", sessionStorage.idUser);
+          newtrack.set("votes", 1);
+          
+  	
+  	
+
+  	newtrack.save(null,{
+  						success : function(newplaylist) {
+  						
+  						},
+  						error : function(newplaylist, error) {
+  							// The save failed.
+  							// error is a Parse.Error with an error code and
+  							// description.
+  						}
+  					});
+              
+              }
 
 	
-}
+
 
 function moreInfo(name, artist,album){
 	
