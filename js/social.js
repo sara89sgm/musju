@@ -449,17 +449,44 @@ function checkAddedTracks(){
 			var i = 0;
 
 			while (i < results.length) {
-
-				addSongPlaylist(results[i].get("urlTrack"), sessionStorage.actualPlaylist);
+				
+				urlTrack=results[i].get("urlTrack");
+				removeRequest(results[i].id);
+				addSongPlaylist(urlTrack, sessionStorage.actualPlaylist);
+			
 				i++;
 			}
 
 		},
 		error : function(error) {
-			alert("Error: " + error.code + " " + error.message);
+			console.log("Error: " + error.code + " " + error.message);
 		}
 	});
 	
+}
+
+function removeRequest(id){
+
+	var RequestTrack = Parse.Object.extend("RequestTrack");
+	var query2 = new Parse.Query(RequestTrack);
+	query2.get(id, {
+		  success: function(request) {
+			
+		    request.destroy({
+		    	  success: function(myObject) {
+		    		    console.log("correctly request deleted"+id);
+		    		  },
+		    		  error: function(myObject, error) {
+		    		    // The delete failed.
+		    		    // error is a Parse.Error with an error code and description.
+		    		  }
+		    		});
+		  },
+		  error: function(object, error) {
+		    // The object was not retrieved successfully.
+		    // error is a Parse.Error with an error code and description.
+		  }
+		});
 }
 
 function getPlaylistUser() {
@@ -486,7 +513,7 @@ function getPlaylistUser() {
 
 		},
 		error : function(error) {
-			alert("Error: " + error.code + " " + error.message);
+			console.log("Error: " + error.code + " " + error.message);
 		}
 	});
 }
@@ -504,49 +531,53 @@ function addSongPlaylist(uri, playlist){
 
 	query.equalTo("urlTrack", track.uri);
 	query.equalTo("urlPlaylist", playlist);
-	query.first({
+	query.find({
 		success : function(results) {
-
+			if(results.length!=0){
 			alert("This track is already in the playlist");
+			}
+			else{
+				var tempPlaylist = new models.Playlist.fromURI(
+						sessionStorage.actualPlaylist);
+				// Add the track
+				tempPlaylist.add(track);
+				var last = tempPlaylist.length;
+				last--;
+				$("#possibleSongs")
+						.append(
+								'<li class="item" ><img height="100" src="'
+										+ tempPlaylist.tracks[last].image
+										+ '" /><h4 class="blackText">'
+										+ tempPlaylist.tracks[last].name + '('
+										+ tempPlaylist.tracks[last].artists[0].name
+										+ ')</h4></li>');
+
+				var TrackPlaylistMusju = Parse.Object.extend("TrackPlaylistMusju");
+				var newtrack = new TrackPlaylistMusju();
+
+				newtrack.set("urlTrack", track.uri);
+				newtrack.set("nameTrack", track.name);
+				newtrack.set("nameArtist", track.artists[0].name);
+				newtrack.set("urlPlaylist", sessionStorage.actualPlaylist);
+				newtrack.set("idUser", sessionStorage.idUser);
+				newtrack.set("votes", 1);
+
+				newtrack.save(null, {
+					success : function(newplaylist) {
+
+					},
+					error : function(newplaylist, error) {
+						// The save failed.
+						// error is a Parse.Error with an error code and
+						// description.
+					}
+				});
+			}
 
 		},
 		error : function(error) {
 			
-			var tempPlaylist = new models.Playlist.fromURI(
-					sessionStorage.actualPlaylist);
-			// Add the track
-			tempPlaylist.add(track);
-			var last = tempPlaylist.length;
-			last--;
-			$("#possibleSongs")
-					.append(
-							'<li class="item" ><img height="100" src="'
-									+ tempPlaylist.tracks[last].image
-									+ '" /><h4 class="blackText">'
-									+ tempPlaylist.tracks[last].name + '('
-									+ tempPlaylist.tracks[last].artists[0].name
-									+ ')</h4></li>');
-
-			var TrackPlaylistMusju = Parse.Object.extend("TrackPlaylistMusju");
-			var newtrack = new TrackPlaylistMusju();
-
-			newtrack.set("urlTrack", track.uri);
-			newtrack.set("nameTrack", track.name);
-			newtrack.set("nameArtist", track.artists[0].name);
-			newtrack.set("urlPlaylist", sessionStorage.actualPlaylist);
-			newtrack.set("idUser", sessionStorage.idUser);
-			newtrack.set("votes", 1);
-
-			newtrack.save(null, {
-				success : function(newplaylist) {
-
-				},
-				error : function(newplaylist, error) {
-					// The save failed.
-					// error is a Parse.Error with an error code and
-					// description.
-				}
-			});
+			
 			
 
 		}
@@ -567,23 +598,24 @@ function moreInfo(name, artist, album) {
 function voteTrack(urlTrack, urlPlaylist) {
 	var TrackPlaylistMusju = Parse.Object.extend("TrackPlaylistMusju");
 	var query = new Parse.Query(TrackPlaylistMusju);
-	query.equalTo("urlTrack", track.uri);
-	query.equalTo("urlPlaylist", playlist);
+	query.equalTo("urlTrack", urlTrack);
+	query.equalTo("urlPlaylist", urlPlaylist);
 	
 	query.first({
 	 
-		success : function(track) {
-			votes = track.get("votes");
+		success : function(tra) {
+			
+			votes = tra.get("votes");
 		
 			votes++;
-			track.set("votes", votes);
-			newVotes = track.get("votes");
+			tra.set("votes", votes);
+			newVotes = tra.get("votes");
 			alert("You have voted the track! Wait to listen to it! :)");
-			track.save();
+			tra.save();
 			// The object was retrieved successfully.
 		},
 		error : function(object, error) {
-			alert("Error");
+			console.log("Error");
 			// The object was not retrieved successfully.
 			// error is a Parse.Error with an error code and description.
 		}
