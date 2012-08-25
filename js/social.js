@@ -4,6 +4,7 @@ function socialInput(uriPl) {
 
 var tempPlaylist;
 var newPlaylistURI;
+var playingPlaylist = new models.Playlist();
 
 $(function() {
 
@@ -216,11 +217,11 @@ function showPlaylistImages(uriPlaylist) {
 						case 0:
 
 							var trackAux = models.Track.fromURI(track2.uri);
-							var playlistt = new models.Playlist();
-							playlistt.add(trackAux);
+							
+							playingPlaylist.add(trackAux);
 							var playerView2 = new views.Player();
 							// playerView2.track = null; // Don't play the track right away
-							playerView2.context = playlistt;
+							playerView2.context = playingPlaylist;
 							$('#actualSong').append(playerView2.node);
 							$('#actualSong')
 									.append(
@@ -267,6 +268,9 @@ function showPlaylistImages(uriPlaylist) {
 													+ track2.name + '('
 													+ track2.artists[0].name
 													+ ')</h3></a>');
+							var trackAux2 = models.Track.fromURI(track2.uri);
+							
+							playingPlaylist.add(trackAux2);
 
 							break;
 						default:
