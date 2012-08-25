@@ -297,14 +297,20 @@ function showPlaylistImages(uriPlaylist) {
 	$("#friend-drop").empty();
 	$("#friend-drop").append("Drag and drop your playlist!");
 
-	// setInterval(function() {
-	// updatePl()
-	// }, 5000);
+	 setInterval(function() {
+	 checkAddedTracks()
+	 }, 5000);
 
 }
 
 function updatePl() {
+	var nextTrackURL=nextSong(sessionStorage.actualPlaylist);
+	
 
+}
+
+function checkAddedTracks(){
+	
 }
 
 function getPlaylistUser() {
