@@ -13,7 +13,7 @@ function nextSong(playlistURL) {
     		track.set("votes", 0);
     		track.save();
     		console.log(track.get("urlTrack"));
-    		//updatePlaylist(playlistURL, track.get("urlTrack"));
+    		updatePlaylist(track.get("urlTrack"),playlistURL);
   		},
   		error: function(error) {
     		alert("Error: " + error.code + " " + error.message);

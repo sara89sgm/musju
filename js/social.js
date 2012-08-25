@@ -226,6 +226,10 @@ function showPlaylistImages(uriPlaylist) {
 							// playerView2.track = null; // Don't play the track right away
 							playerView2.context = playingPlaylist;
 							$('#actualSong').append(playerView2.node);
+							$('#actualSong').append('<h3 class="blackText">'
+							+ track2.name + '('
+							+ track2.artists[0].name
+							+ ')</h3>');
 							$('#actualSong')
 									.append(
 											'<a class="more medium orange awesome""  style="float:right">More</a>');
@@ -239,7 +243,7 @@ function showPlaylistImages(uriPlaylist) {
 
 										if ($(this).parent().hasClass("open")) {
 											$(this).parent().animate({
-												"height" : 125
+												"height" : 140
 											}).removeClass("open");
 											$(this).html("More...");
 											$("#moreInfoResults").empty();
@@ -313,7 +317,7 @@ function updatePlaylist(uriTrack, uriPlaylist) {
 	var trackAux2 = models.Track.fromURI(uriTrack);
 	alert("next:"+trackAux2.name);
 	$("#nextsong").empty();
-	/*$("#nextsong")
+	$("#nextsong")
 	.append(
 			'<a class="item" data-id="id-'
 					+ i
@@ -322,7 +326,7 @@ function updatePlaylist(uriTrack, uriPlaylist) {
 					+ '" /><h3 class="blackText">'
 					+ trackAux2.name + '('
 					+ trackAux2.album.artist.name
-					+ ')</h3></a>');*/
+					+ ')</h3></a>');
 
 
 playingPlaylist.add(trackAux2);
@@ -356,11 +360,15 @@ function updatePagePlaylist(uri){
 	
 	$('#actualSong').empty();
 	$('#actualSong').append(playerView.node);
-	/*$('#actualSong')
+	$('#actualSong').append('<h3 class="blackText">'
+			+ trackAux.name + '('
+			+ trackAux.artists[0].name
+			+ ')</h3>');
+	$('#actualSong')
 			.append(
 					'<a class="more medium orange awesome""  style="float:right">More</a>');
 	$('#actualSong').append(
-			'<div id="moreInfoResults"></div>');*/
+			'<div id="moreInfoResults"></div>');
 	var nameS = trackAux.name;
 	var artist = "";
 
@@ -369,7 +377,7 @@ function updatePagePlaylist(uri){
 
 				if ($(this).parent().hasClass("open")) {
 					$(this).parent().animate({
-						"height" : 125
+						"height" : 140
 					}).removeClass("open");
 					$(this).html("More...");
 					$("#moreInfoResults").empty();
