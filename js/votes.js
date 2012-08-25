@@ -1,5 +1,6 @@
 //requires URL of the playlist we're calculating the votes for
-//return trackURL of next song to play
+//sets votes=0 to the track with most votes
+//calls updatePlaylist with the trackURL of next song to play
 function nextSong(playlistURL) {
 	
 	var TrackPlaylistMusju = Parse.Object.extend("TrackPlaylistMusju");
@@ -8,20 +9,21 @@ function nextSong(playlistURL) {
 	query.descending("votes");
 	query.first({
   		success: function(track) {
-    		// Successfully retrieved the track with most votes.
-    		console.log(track);
-    		console.log(track.get("votes"));
+    		//Successfully retrieved the track with most votes.
     		track.set("votes", 0);
     		track.save();
-    		return track.get("urlTrack");
+    		console.log(track.get("urlTrack"));
+    		//updatePlaylist(playlistURL, track.get("urlTrack"));
   		},
   		error: function(error) {
     		alert("Error: " + error.code + " " + error.message);
+    		return "hello";
   		}
 	});
 
 }
 
 function testNextSong() {
-	alert(nextSong('http://open.spotify.com/user/shara_sgm/playlist/6xGeQ46kWrpEJfszBXZeh6'));
+	nextSong('http://open.spotify.com/user/shara_sgm/playlist/6xGeQ46kWrpEJfszBXZeh6');
+	nextSong('http://open.spotify.com/user/shara_sgm/playlist/5l4wrbYGMorl2XGZ90TOsw');	
 } 
