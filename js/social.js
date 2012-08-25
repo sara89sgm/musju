@@ -196,6 +196,7 @@ function showPlaylistNoImages(uriPl) {
 //Show the tracks with the images of the album in the Playlist Tab
 
 function showPlaylistImages(uriPlaylist) {
+	sessionStorage.first=0;
 	var tempPlaylist = new models.Playlist.fromURI(uriPlaylist);
 	sessionStorage.actualPlaylist = uriPlaylist;
 
@@ -308,9 +309,11 @@ function showPlaylistImages(uriPlaylist) {
 
 //Update the NextSong div with the new selected song
 function updatePlaylist(uriTrack, uriPlaylist) {
+	
 	var trackAux2 = models.Track.fromURI(uriTrack);
+	alert("next:"+trackAux2.name);
 	$("#nextsong").empty();
-	$("#nextsong")
+	/*$("#nextsong")
 	.append(
 			'<a class="item" data-id="id-'
 					+ i
@@ -319,7 +322,7 @@ function updatePlaylist(uriTrack, uriPlaylist) {
 					+ '" /><h3 class="blackText">'
 					+ trackAux2.name + '('
 					+ trackAux2.album.artist.name
-					+ ')</h3></a>');
+					+ ')</h3></a>');*/
 
 
 playingPlaylist.add(trackAux2);
@@ -334,25 +337,30 @@ player.observe(models.EVENT.CHANGE, function (e) {
 
 	// Only update the page if the track changed
 	if (e.data.curtrack == true) {
+		if(sessionStorage.first==0){
+			sessionStorage.first=1;
+		}else{
 		updatePagePlaylist(player.track.uri);
+		}
 	}
 });
 
 //Change Playing with the Nextsong track and call vote() to get the nextSong
 function updatePagePlaylist(uri){
 	var trackAux = models.Track.fromURI(uri);
+	alert("here"+trackAux.name);
 	
+	var playerView = new views.Player();
+
+	playerView.context = playingPlaylist;
 	
-	var playerView2 = new views.Player();
-	// playerView2.track = null; // Don't play the track right away
-	playerView2.context = playingPlaylist;
 	$('#actualSong').empty();
-	$('#actualSong').append(playerView2.node);
-	$('#actualSong')
+	$('#actualSong').append(playerView.node);
+	/*$('#actualSong')
 			.append(
 					'<a class="more medium orange awesome""  style="float:right">More</a>');
 	$('#actualSong').append(
-			'<div id="moreInfoResults"></div>');
+			'<div id="moreInfoResults"></div>');*/
 	var nameS = trackAux.name;
 	var artist = "";
 
@@ -425,8 +433,8 @@ function updateOtherSongsPlaylist(uri){
 
 function checkAddedTracks(){
 	
-	var NewTrack = Parse.Object.extend("NewTrack");
-	var query = new Parse.Query(NewTrack);
+	var RequestTrack = Parse.Object.extend("RequestTrack");
+	var query = new Parse.Query(RequestTrack);
 
 	query.equalTo("urlPlaylist", sessionStorage.actualPlaylist);
 	query.find({
