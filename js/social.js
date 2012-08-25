@@ -243,7 +243,7 @@ function showPlaylistImages(uriPlaylist) {
 
 										if ($(this).parent().hasClass("open")) {
 											$(this).parent().animate({
-												"height" : 140
+												"height" : 150
 											}).removeClass("open");
 											$(this).html("More...");
 											$("#moreInfoResults").empty();
@@ -317,11 +317,8 @@ function updatePlaylist(uriTrack, uriPlaylist) {
 	var trackAux2 = models.Track.fromURI(uriTrack);
 	alert("next:"+trackAux2.name);
 	$("#nextsong").empty();
-	$("#nextsong")
-	.append(
-			'<a class="item" data-id="id-'
-					+ i
-					+ '" data-type="track"><img height="100" src="'
+	$("#nextsong").append(
+			'<a class="item" data-type="track"><img height="100" src="'
 					+ trackAux2.image
 					+ '" /><h3 class="blackText">'
 					+ trackAux2.name + '('
@@ -359,11 +356,13 @@ function updatePagePlaylist(uri){
 	playerView.context = playingPlaylist;
 	
 	$('#actualSong').empty();
-	$('#actualSong').append(playerView.node);
-	$('#actualSong').append('<h3 class="blackText">'
+	$('#actualSong').append('<a class="item" data-type="track"><img height="100" src="'
+			+ trackAux.image
+			+ '" /><h3 class="blackText">'
 			+ trackAux.name + '('
-			+ trackAux.artists[0].name
-			+ ')</h3>');
+			+ trackAux.album.artist.name
+			+ ')</h3></a>');
+	
 	$('#actualSong')
 			.append(
 					'<a class="more medium orange awesome""  style="float:right">More</a>');
