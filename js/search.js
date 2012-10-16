@@ -11,64 +11,6 @@ function searchInput(args) {
 var asyncCalls = [],  // Initiate for later
 	tempPlaylist = new models.Playlist();
 
-function searchPage(){
-	alert("hello");
-	$("#search-basic").click(function(e){
-		var query = $("#search-term").val();
-		var type = $(this).attr("id");
-		if(query!="") {
-			
-					$("#search-results2").empty();
-					$("#search-results2").append("<h2 class='clackText'>Songs</h2>");
-					var search = new models.Search(query);
-					search.localResults = models.LOCALSEARCHRESULTS.APPEND;		// Local
-																				// files
-																				// last
-					search.observe(models.EVENT.CHANGE, function() {
-						
-						$("#search-results").append("<h2 class='blackText'>Tracks</h2>");
-						if(search.tracks.length) {
-							
-							var playlistArt = new views.Player();
-							playlistArt.track = tempPlaylist.get(0);
-							playlistArt.context = tempPlaylist;
-							$("#search-results").append(playlistArt.node);
-						var saveButton = "<button id='savePlaylist' class='add-playlist button icon'>Save As Playlist</button>";
-							$("#search-results .sp-player").append(saveButton);
-							tempPlaylist = new models.Playlist();
-							$.each(search.tracks,function(index,track){
-								$("#search-results").append('<div><a href="'+track.uri+'">'+track.name+'</a></div>');
-								
-								// tempPlaylist.add(models.Track.fromURI(track.uri));
-								// // Note: artwork is compiled from first few
-								// tracks. if any are local it will fail to
-								// generate....
-							});				
-						
-							// var playlistList = new views.List(tempPlaylist);
-							// playlistList.node.classList.add("temporary");
-							// $("#search-results").append(playlistList.node);
-						} else {
-							$("#search-results").append('<div>No tracks in results</div>');
-						}
-					});
-					search.appendNext();
-					
-		}
-	});
-	$("#search-examples a").click(function(e){
-		$("#search-term").val($(this).text());
-		e.preventDefault();
-	});
-	$("#savePlaylist").live('click',function(e){
-		var myAwesomePlaylist = new models.Playlist($("#search-term").val()+" Tracks");
-		$.each(tempPlaylist.data.all(),function(i,track){
-			myAwesomePlaylist.add(track);
-		});
-		e.preventDefault();
-	});
-	
-}
 
 $(function() {
     $("#spotify_song_search").autocomplete({
@@ -109,27 +51,79 @@ function asyncComplete(key) {
 
 
 //We access the SPARQL endpoint through YQL to avoid the cross-domain issue
-function sparqlQuery(q, callback){
+/*function sparqlQuery(q, callback){
 	var pref = 'PREFIX movie:<http://data.linkedmdb.org/resource/movie/>'
-		+ 'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>'
-		+ 'PREFIX foaf: <http://xmlns.com/foaf/0.1/>'
-		+ 'PREFIX dc: <http://purl.org/dc/terms/>';
+    + 'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>'
+    + 'PREFIX foaf: <http://xmlns.com/foaf/0.1/>'
+    + 'PREFIX dc: <http://purl.org/dc/terms/>';
 	var url = 'http://linkedbrainz.fluidops.net/sparql?query='+encodeURIComponent(pref+q);
 	var yql = 'http://query.yahooapis.com/v1/public/yql?q='+encodeURIComponent('select * from xml where url="'+url+'"')+'&format=json';
 	$.ajax({
-		url: yql,
-		dataType: 'jsonp',
-		jsonp: 'callback',
-		jsonpCallback: callback
-	});
+           url: yql,
+           dataType: 'jsonp',
+           jsonp: 'callback',
+           jsonpCallback: callback
+           });
+    
+}*/
 
+function sparqlQuery(q, callback){
+ var pref ='PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> '
+ + 'PREFIX foaf: <http://xmlns.com/foaf/0.1/> '
+ + 'PREFIX dc: <http://purl.org/dc/terms/> ';
+ var urlLD = 'http://linkedbrainz.fluidops.net/sparql?query='+encodeURIComponent(pref+q)+'&format=application%2Fsparql-results%2Bjson';
+    console.log(urlLD);
+    
+   
+ //var yql = 'http://query.yahooapis.com/v1/public/yql?q='+encodeURIComponent('select * from xml where url="'+urlLD+'"')+'&format=json';
+ $.ajax({
+ url: urlLD,
+ dataType: 'json',
+   success: function(data) { 
+        getDataLD(data);
+        },
+ });
+ 
+ }
+
+function getDataLD(data){
+    $("#moreInfoResults").empty();
+      $("#moreInfoResults").append(' <hr>');
+    $("#moreInfoResults").append('<h3 class="blackText"> Other release of this artist: </h3> </br>');
+    $("#moreInfoResults").append('<ul>');
+     var i=0;
+    release=data.results.bindings[0];
+    while(((typeof(release)) != 'undefined') && (i<5)){
+          $("#moreInfoResults").append('<li><a href="'+release.Release.value+'">'+release.result.value+'</a></li>');
+        i++
+        release=data.results.bindings[i];
+    }
+    $("#moreInfoResults").append('</ul>');
+    console.log(JSON.stringify(data));
 }
-
 var cbfuncAll = function(data) {
-	 
-	 
-	  
-		$("#moreInfoResults").append(JSON.stringify(data));
+    var arrayResults=data.query.results.sparql.results.result;
+    var release=arrayResults[0];
+    var i=0;
+    while(((typeof(place)) != 'undefined') && (i<15)){
+        type=release.binding[1].uri;
+        alert("type:"+type);
+        if(type=='http://xmlns.com/foaf/0.1/made'){
+            alert("buscar");
+    $.ajax({
+           url: 'http://musicbrainz.org/ws/2/release/62bef034-b779-30dd-bbfd-a2035d0e0f74#_',
+           method: 'GET',
+           dataType: 'xml',
+           success : function(result) {
+           title=$(result).find("title").text()
+           $("#moreInfoResults").append('<a href="'+uri+'">'+title+'</a>');
+           }
+           });
+        }
+        i++;
+        release=arrayResults[i];
+    }
+		// 
 		
   
 };
@@ -138,32 +132,16 @@ var cbfuncAll = function(data) {
 function searchMoreInfo(name,artist,album){
 
 	
-	var arrayN=album.split(" ");
-	var nameSplited="";
-	
-	for(x in arrayN){
-		if(x==0){
-			
-			nameSplited=arrayN[x];
-		}else{
-			nameSplited=nameSplited+" AND "+arrayN[x];
-		}
-		
-	}
-	alert(nameSplited);
-	
-			var q = 'PREFIX luc: <http://www.ontotext.com/owlim/lucene#>'+ 
-				'SELECT distinct ?Artist ?v ?result'+ 
-					' WHERE { ?Object luc:luceneIndex "'+artist+'". '+ 
-				' ?Object2 luc:luceneIndex "'+nameSplited+'" .'+
-						' ?Release rdfs:label ?Object2 . '+
-						' ?Release rdf:type purl-mo:Release . '+
-						' ?Release foaf:maker ?Artist .'+
-						' ?Artist foaf:name ?Object . '+
-						' ?Artist rdf:type purl-mo:MusicArtist .  '+
-						' ?Artist ?v ?result.} '+
-
-						' LIMIT 1000 ';
+	var q = 'PREFIX luc: <http://www.ontotext.com/owlim/lucene#> '+ 
+ 
+    ' SELECT distinct ?Release ?v ?result' + 
+    ' WHERE { '+
+        '?Artist foaf:name  "'+artist+'". ' +
+        '?Artist rdf:type purl-mo:MusicArtist .' +
+        '?Release rdf:type purl-mo:Release.'+
+        '?Release foaf:maker ?Artist .'+ 
+        '?Release dcterms:title ?result.'+
+          ' } LIMIT 100';
 			
 			alert("q:"+q);
 			sparqlQuery(q, 'cbfuncAll');

@@ -77,6 +77,17 @@ $(function(){
 	
 });
 
+   var map_object;
+            function initialize() {
+                var myOptions = {
+                    zoom: 15,
+                    center: new google.maps.LatLng(37.7879938,-122.4074374),
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                map_object = new google.maps.Map(document.getElementById('map_object'), myOptions);
+            }
+            google.maps.event.addDomListener(window, 'load', initialize);
+
 
 
 

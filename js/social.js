@@ -4,7 +4,7 @@ function socialInput(uriPl) {
 
 var tempPlaylist;
 var newPlaylistURI;
-var playingPlaylist = new models.Playlist();
+var playingPlaylist = new models.Playlist.fromURI("spotify:user:shara_sgm:playlist:4Qu2wx7VBtzXm8v5PdO9JF");
 
 $(function() {
 
@@ -122,7 +122,7 @@ function checkPlaylistNoExists(url) {
 	query
 			.find({
 				success : function(results) {
-					alert("playlists: " + results.length);
+					
 					if (results.length == 0) {
 						createNewPlaylist();
 					} else {
@@ -220,7 +220,7 @@ function showPlaylistImages(uriPlaylist) {
 						case 0:
 
 							var trackAux = models.Track.fromURI(track2.uri);
-							
+                 // playingPlaylist= new models.Playlist.fromURI("spotify:user:shara_sgm:playlist:4Qu2wx7VBtzXm8v5PdO9JF");
 							playingPlaylist.add(trackAux);
 							var playerView2 = new views.Player();
 							// playerView2.track = null; // Don't play the track right away
@@ -279,16 +279,20 @@ function showPlaylistImages(uriPlaylist) {
 							
 							playingPlaylist.add(trackAux2);
 							localStorage.nextTrackURI=track2.uri;
+                  
+                  
 
 							break;
 						default:
+                  urlTrackParam="'"+track2.uri+"'";
+                  uriPlaylistParam="'"+uriPlaylist+"'";
 							$("#possibleSongs")
 									.append(
 											'<li class="item" data-id="id-'
 													+ i
-													+ '" data-type="track"><img height="100" src="'
+													+ '" data-type="track"><a href="#" onclick="voteTrack('+urlTrackParam+','+ uriPlaylistParam+')"><img height="100" src="'
 													+ track2.image
-													+ '" /><h4 class="blackText">'
+													+ '" /></a><h4 class="blackText">'
 													+ track2.name + '('
 													+ track2.artists[0].name
 													+ ')</h4></li>');
@@ -315,7 +319,7 @@ function showPlaylistImages(uriPlaylist) {
 function updatePlaylist(uriTrack, uriPlaylist) {
 	
 	var trackAux2 = models.Track.fromURI(uriTrack);
-	alert("next:"+trackAux2.name);
+	
 	$("#nextsong").empty();
 	$("#nextsong").append(
 			'<a class="item" data-type="track"><img height="100" src="'
@@ -325,7 +329,7 @@ function updatePlaylist(uriTrack, uriPlaylist) {
 					+ trackAux2.album.artist.name
 					+ ')</h3></a>');
 
-
+    //var ppp=playerImage.context;
 playingPlaylist.add(trackAux2);
 localStorage.nextTrackURI=trackAux2.uri;
 updateOtherSongsPlaylist(uriPlaylist);
@@ -349,11 +353,11 @@ player.observe(models.EVENT.CHANGE, function (e) {
 //Change Playing with the Nextsong track and call vote() to get the nextSong
 function updatePagePlaylist(uri){
 	var trackAux = models.Track.fromURI(uri);
-	alert("here"+trackAux.name);
 	
-	var playerView = new views.Player();
+	
+	//var playerView = new views.Player();
 
-	playerView.context = playingPlaylist;
+	//playerView.context = playingPlaylist;
 	
 	$('#actualSong').empty();
 	$('#actualSong').append('<a class="item" data-type="track"><img height="100" src="'
@@ -387,10 +391,10 @@ function updatePagePlaylist(uri){
 						"height" : 300
 					}).addClass("open");
 					$(this).html("Less...");
-					alert(track2.album.name);
-					moreInfo(track2.name,
-							track2.artists[0].name,
-							track2.album.name);
+					
+					moreInfo(trackAux.name,
+							trackAux.album.artist.name,
+							trackAux.album.name);
 
 				}
 				e.preventDefault();
@@ -419,13 +423,15 @@ function updateOtherSongsPlaylist(uri){
 					tempPlaylist2.tracks,
 					function(num, track2) {
 					if(track2.uri!=localStorage.actualTrackURI &&track2.uri!=localStorage.nextTrackURI){
+                  urlTrackParam="'"+track2.uri+"'";
+                  uriPlaylistParam="'"+uri+"'";
 							$("#possibleSongs")
 									.append(
 											'<li class="item" data-id="id-'
 													+ i
-													+ '" data-type="track"><img height="100" src="'
+													+ '" data-type="track"><a href="#" onclick="voteTrack('+urlTrackParam+','+ uriPlaylistParam+')"><img height="100" src="'
 													+ track2.image
-													+ '" /><h4 class="blackText">'
+													+ '" /></a><h4 class="blackText">'
 													+ track2.name + '('
 													+ track2.artists[0].name
 													+ ')</h4></li>');
@@ -610,7 +616,7 @@ function voteTrack(urlTrack, urlPlaylist) {
 			votes++;
 			tra.set("votes", votes);
 			newVotes = tra.get("votes");
-			alert("You have voted the track! Wait to listen to it! :)");
+			alert("You have voted the track! Wait to listen to it! :)"+newVotes);
 			tra.save();
 			// The object was retrieved successfully.
 		},

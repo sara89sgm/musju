@@ -22,6 +22,7 @@
 <script type="text/javascript" src="js/jquery-ui-1.8.22.custom.min.js"></script>
 	
 <script type="text/javascript" src="js/jquery.quicksand.js"></script>
+      <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
 
 <script type="text/javascript" src="js/init.js"></script>
 <script type="text/javascript" src="js/player.js"></script>
@@ -127,12 +128,21 @@
 		<div id="search" class="section">
 		
 			Enter a search term: <input type="text" id="search-term" value="song">
-			<button onclick="searchPage()" class="large orange awesome">Search</button>
+			<button id="search-basic" class="large orange awesome">Search</button>
 			
 
 
 			<div id="search-results2"></div>
 		</div>
+        <div id="pubs" class="section">
+            
+            <div id="map_object" style="width:800px;height:400px;"></div>
+			<ul data-role="listview" data-divider-theme="b" data-inset="true" id="listPlacesNow">
+                
+                
+			</ul>
+	    </div>
+            </div>
 	</div>
 </body>
 </html>

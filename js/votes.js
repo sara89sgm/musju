@@ -10,8 +10,10 @@ function nextSong(playlistURL) {
 	query.first({
   		success: function(track) {
     		//Successfully retrieved the track with most votes.
+                alert('votes: '+track.get("votes")+'name: '+track.get("nameTrack"));
     		track.set("votes", 0);
     		track.save();
+                
     		console.log(track.get("urlTrack"));
     		updatePlaylist(track.get("urlTrack"),playlistURL);
   		},
